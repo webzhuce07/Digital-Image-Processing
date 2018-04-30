@@ -28,6 +28,8 @@ void MainWindow::on_processButton_clicked()
 {
     if(!image.data)
         return;
+	if (image.channels() != 3)
+		return;
     cv::Mat result;
     cv::Vec3b target(130, 190, 230);
     int mindistance = 100;
