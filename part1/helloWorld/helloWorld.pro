@@ -12,3 +12,5 @@ LIBS += -LD:/opencv/build/x64/vc14/lib \
 CONFIG       += console
 SOURCES       = main.cpp 
 
+RESOURCES +=
+
