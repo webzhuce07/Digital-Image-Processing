@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
-    <height>449</height>
+    <width>828</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QPushButton" name="OpenImageButton">
     <property name="geometry">
      <rect>
-      <x>34</x>
-      <y>42</y>
-      <width>81</width>
+      <x>20</x>
+      <y>30</y>
+      <width>101</width>
       <height>41</height>
      </rect>
     </property>
@@ -27,17 +27,17 @@
      <string>Open Image</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ProcessButton">
+   <widget class="QPushButton" name="processButton1">
     <property name="geometry">
      <rect>
-      <x>34</x>
-      <y>120</y>
-      <width>81</width>
+      <x>20</x>
+      <y>90</y>
+      <width>101</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Process</string>
+     <string>Translate</string>
     </property>
    </widget>
    <widget class="QLabel" name="DisplayLabel">
@@ -45,12 +45,25 @@
      <rect>
       <x>190</x>
       <y>20</y>
-      <width>491</width>
-      <height>291</height>
+      <width>611</width>
+      <height>461</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="processButton2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rotate</string>
     </property>
    </widget>
   </widget>
@@ -59,7 +72,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>730</width>
+     <width>828</width>
      <height>23</height>
     </rect>
    </property>

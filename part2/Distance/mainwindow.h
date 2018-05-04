@@ -17,8 +17,8 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_openImageButton_clicked();
-    void on_processButton_clicked();
+    void on_OpenImageButton_clicked();
+    void on_ProcessButton_clicked();
 
 private:
     int getD4Distance(const cv::Vec3b& color, const cv::Vec3b& target) const;

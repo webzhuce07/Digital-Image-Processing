@@ -15,16 +15,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_openImageButton_clicked()
+void MainWindow::on_OpenImageButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), ".", tr("Image Files(*.png *jpg *bmp)"));
     image = cv::imread(fileName.toStdString());
     QImage img = cvMat2QImage(image);
-    ui->displayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->setPixmap(QPixmap::fromImage(img));
+	ui->DisplayLabel->resize(ui->DisplayLabel->pixmap()->size());
 
 }
 
-void MainWindow::on_processButton_clicked()
+void MainWindow::on_ProcessButton_clicked()
 {
     if(!image.data)
         return;
@@ -44,7 +45,8 @@ void MainWindow::on_processButton_clicked()
         else *itout = 0;
     }
     QImage img = cvMat2QImage(result);
-    ui->displayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->setPixmap(QPixmap::fromImage(img));
+	ui->DisplayLabel->resize(ui->DisplayLabel->pixmap()->size());
 }
 
 int MainWindow::getD4Distance(const cv::Vec3b &color, const cv::Vec3b& target) const

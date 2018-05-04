@@ -15,43 +15,46 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_openImageButton_clicked()
+void MainWindow::on_OpenImageButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), ".", tr("Image Files(*.png *jpg *bmp)"));
     image = cv::imread(fileName.toStdString());
     QImage img = cvMat2QImage(image);
-    ui->displayLabel->setPixmap(QPixmap::fromImage(img));
-
+    ui->DisplayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->resize(ui->DisplayLabel->pixmap()->size());
 }
 
-void MainWindow::on_processButton3_clicked()
+void MainWindow::on_ProcessButton3_clicked()
 {
     if(!image.data)
         return;
     cv::Mat result = image.clone();
     saltByIterator(result, 150);
     QImage img = cvMat2QImage(result);
-    ui->displayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->resize(ui->DisplayLabel->pixmap()->size());
 }
 
-void MainWindow::on_processButton2_clicked()
+void MainWindow::on_ProcessButton2_clicked()
 {
     if(!image.data)
         return;
     cv::Mat result = image.clone();
     saltByPointer(result, 150);
     QImage img = cvMat2QImage(result);
-    ui->displayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->resize(ui->DisplayLabel->pixmap()->size());
 }
 
-void MainWindow::on_processButton1_clicked()
+void MainWindow::on_ProcessButton1_clicked()
 {
     if(!image.data)
         return;
     cv::Mat result = image.clone();
     saltDirectly(result, 150);
     QImage img = cvMat2QImage(result);
-    ui->displayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->setPixmap(QPixmap::fromImage(img));
+    ui->DisplayLabel->resize(ui->DisplayLabel->pixmap()->size());
 }
 
 void MainWindow::saltDirectly(cv::Mat &image, int n)

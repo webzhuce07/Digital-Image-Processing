@@ -18,14 +18,11 @@ public:
 
 private slots:
     void on_OpenImageButton_clicked();
-    void on_ProcessButton3_clicked();
-    void on_ProcessButton2_clicked();
-    void on_ProcessButton1_clicked();
+    void on_ProcessButton_clicked();
 
 private:
-    void saltDirectly(cv::Mat &image, int n);
-    void saltByPointer(cv::Mat &image, int n);
-    void saltByIterator(cv::Mat &image, int n);
+    void sharpen(const cv::Mat& image, cv::Mat& result);
+     void sharpen2D(const cv::Mat& image, cv::Mat& result);
     Ui::MainWindow *ui;
     cv::Mat image;
 };

@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="openImageButton">
+   <widget class="QPushButton" name="OpenImageButton">
     <property name="geometry">
      <rect>
       <x>34</x>
@@ -27,7 +27,7 @@
      <string>Open Image</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="processButton">
+   <widget class="QPushButton" name="ProcessButton">
     <property name="geometry">
      <rect>
       <x>34</x>
@@ -40,7 +40,7 @@
      <string>Process</string>
     </property>
    </widget>
-   <widget class="QLabel" name="displayLabel">
+   <widget class="QLabel" name="DisplayLabel">
     <property name="geometry">
      <rect>
       <x>190</x>

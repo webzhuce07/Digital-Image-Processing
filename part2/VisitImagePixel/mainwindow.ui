@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="openImageButton">
+   <widget class="QPushButton" name="OpenImageButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -27,7 +27,7 @@
      <string>Open Image</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="processButton1">
+   <widget class="QPushButton" name="ProcessButton1">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -40,11 +40,11 @@
      <string>VisitDirectly</string>
     </property>
    </widget>
-   <widget class="QLabel" name="displayLabel">
+   <widget class="QLabel" name="DisplayLabel">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>20</y>
+      <x>130</x>
+      <y>30</y>
       <width>491</width>
       <height>291</height>
      </rect>
@@ -53,7 +53,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="processButton2">
+   <widget class="QPushButton" name="ProcessButton2">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -66,7 +66,7 @@
      <string>VisitByPointer</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="processButton3">
+   <widget class="QPushButton" name="ProcessButton3">
     <property name="geometry">
      <rect>
       <x>20</x>

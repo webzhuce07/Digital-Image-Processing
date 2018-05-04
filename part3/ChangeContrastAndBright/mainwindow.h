@@ -18,14 +18,11 @@ public:
 
 private slots:
     void on_OpenImageButton_clicked();
-    void on_ProcessButton3_clicked();
-    void on_ProcessButton2_clicked();
-    void on_ProcessButton1_clicked();
+    void on_ContrastSlider_valueChanged(int value);
+    void on_BrightSlider_valueChanged(int value);
 
 private:
-    void saltDirectly(cv::Mat &image, int n);
-    void saltByPointer(cv::Mat &image, int n);
-    void saltByIterator(cv::Mat &image, int n);
+    void changeContrastAndBright();
     Ui::MainWindow *ui;
     cv::Mat image;
 };
