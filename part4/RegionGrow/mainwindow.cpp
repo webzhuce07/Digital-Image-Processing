@@ -55,10 +55,11 @@ void MainWindow::on_RegionGrowButton_clicked()
 {
     if(!image_.data)
         return;
-    cv::Mat result = regionGrow(image_, seed_point_, 8);
+    int throld = 4;
+    cv::Mat result = regionGrow(image_, seed_point_, throld);
     namedWindow("regionGrow");
     imshow("regionGrow", result);
-    cv::Mat result_fast = regionGrowFast(image_, seed_point_, 8);
+    cv::Mat result_fast = regionGrowFast(image_, seed_point_, throld);
     namedWindow("regionGrowFast");
     imshow("regionGrowFast", result_fast);
 
@@ -77,8 +78,6 @@ cv::Mat MainWindow::regionGrow(const cv::Mat &src, const cv::Point2i seed, int t
         return result;
     result.at<uchar>(seed.y, seed.x) = 255;
 
-    //gray value of seed
-    int seed_gray = gray.at<uchar>(seed.y, seed.x);
     //count: sum of points that meet the conditions in every eight-neighbor
     int count = 1;
     //start growing
@@ -88,6 +87,8 @@ cv::Mat MainWindow::regionGrow(const cv::Mat &src, const cv::Point2i seed, int t
             for(int col = 1; col < gray.cols - 1; col++){
                 if(result.at<uchar>(row, col) != 255)
                     continue;
+                //gray value of current seed
+                int seed_gray = gray.at<uchar>(row, col);
                 for(int m = row -1; m <= row+1; m++){
                     for(int n = col -1; n <= col+1; n++){
                         int value = gray.at<uchar>(m, n);
@@ -96,7 +97,6 @@ cv::Mat MainWindow::regionGrow(const cv::Mat &src, const cv::Point2i seed, int t
                             count++;
                         }
                     }
-
                 }
             }
         }
@@ -116,8 +116,6 @@ cv::Mat MainWindow::regionGrowFast(const cv::Mat &src, const cv::Point2i seed, i
         return result;
     result.at<uchar>(seed.y, seed.x) = 255;
 
-    //gray value of seed
-    int seed_gray = gray.at<uchar>(seed.y, seed.x);
     //grow direction sequenc
     int grow_direction[8][2] = {{-1,-1}, {0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}};
     //seeds collection
@@ -129,6 +127,8 @@ cv::Mat MainWindow::regionGrowFast(const cv::Mat &src, const cv::Point2i seed, i
         //get a seed
         cv::Point2i current_seed = seeds.back();
         seeds.pop_back();
+        //gray value of current seed
+        int seed_gray = gray.at<uchar>(current_seed.y, current_seed.x);
 
         for(int i = 0; i < 8; ++i){
             cv::Point2i neighbor_seed(current_seed.x + grow_direction[i][0], current_seed.y + grow_direction[i][1]);
