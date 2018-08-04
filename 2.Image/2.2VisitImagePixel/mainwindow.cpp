@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+	setWindowTitle("阿Bin先生");
 }
 
 MainWindow::~MainWindow()

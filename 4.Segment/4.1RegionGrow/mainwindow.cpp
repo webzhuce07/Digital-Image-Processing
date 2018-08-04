@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     seed_point_(-1, -1)
 {
     ui->setupUi(this);
+	setWindowTitle("阿Bin先生");
 }
 
 MainWindow::~MainWindow()
