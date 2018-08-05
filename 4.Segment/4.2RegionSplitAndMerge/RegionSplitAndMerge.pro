@@ -14,10 +14,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    splitandmerge.cpp
 
 HEADERS  += mainwindow.h \
-    utility.h
+    utility.h \
+    splitandmerge.h
 
 FORMS    += mainwindow.ui
 

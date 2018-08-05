@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 	setWindowTitle("阿Bin先生");
-    setWindowIcon(QPixmap(":/new/image/logo.jpg"));
 }
 
 MainWindow::~MainWindow()

@@ -1,8 +1,9 @@
-#-------------------------------------------------
+#**********************************************************************
 #
-# Project created by QtCreator 2018-04-18T21:22:22
+#  Copyright (c) Mr.Bin. All rights reserved.
+#  For more information visit: http://blog.csdn.net/webzhuce 
 #
-#-------------------------------------------------
+#**********************************************************************
 
 QT       += core gui
 
@@ -28,6 +29,3 @@ LIBS += -LD:/opencv/build/x64/vc14/lib \
 LIBS += -LD:/opencv/build/x64/vc14/lib \
 -lopencv_world340
 }
-
-RESOURCES += \
-    image.qrc
