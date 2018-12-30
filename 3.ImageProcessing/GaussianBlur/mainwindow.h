@@ -21,7 +21,7 @@ private slots:
     void on_ProcessButton1_clicked();
 
 private:
-    void gaussianBlur(cv::Mat& image_);
+    void gaussianBlur(const cv::Mat& image_);
     Ui::MainWindow *ui;
     cv::Mat image_;
 };
