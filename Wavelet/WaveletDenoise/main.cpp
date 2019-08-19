@@ -1,3 +1,9 @@
+/**********************************************************************
+
+Copyright (c) Mr.Bin. All rights reserved.
+For more information visit: http://blog.csdn.net/webzhuce
+
+**********************************************************************/
 # include<opencv2/opencv.hpp>
 # include<iostream>
 #include "wavelet.h"
@@ -22,22 +28,22 @@ int main() {
 
 double GenerateGaussianNoise(double mu, double sigma)
 {
-	//¶¨ÒåĞ¡Öµ
+	//å®šä¹‰å°å€¼
 	const double epsilon = numeric_limits<double>::min();
 	static double z0, z1;
 	static bool flag = false;
 	flag = !flag;
-	//flagÎª¼Ù¹¹Ôì¸ßË¹Ëæ»ú±äÁ¿X
+	//flagä¸ºå‡æ„é€ é«˜æ–¯éšæœºå˜é‡X
 	if (!flag)
 		return z1 * sigma + mu;
 	double u1, u2;
-	//¹¹ÔìËæ»ú±äÁ¿
+	//æ„é€ éšæœºå˜é‡
 	do
 	{
 		u1 = rand() * (1.0 / RAND_MAX);
 		u2 = rand() * (1.0 / RAND_MAX);
 	} while (u1 <= epsilon);
-	//flagÎªÕæ¹¹Ôì¸ßË¹Ëæ»ú±äÁ¿
+	//flagä¸ºçœŸæ„é€ é«˜æ–¯éšæœºå˜é‡
 	z0 = sqrt(-2.0*log(u1))*cos(2 * CV_PI*u2);
 	z1 = sqrt(-2.0*log(u1))*sin(2 * CV_PI*u2);
 	return z0*sigma + mu;
