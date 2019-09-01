@@ -4,7 +4,7 @@ using namespace cv;
 
 int main()
 {
-    Mat image = imread("E:/TestData/erode_dilate.bmp");
+    Mat image = imread("../ErodeDilate/erode_dilate.bmp");
     if (image.empty())
 	{
 		std::cout << "Error: load image failed." << std::endl;

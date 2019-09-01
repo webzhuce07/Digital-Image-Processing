@@ -1,3 +1,9 @@
+/**********************************************************************
+
+Copyright (c) Mr.Bin. All rights reserved.
+For more information visit: http://blog.csdn.net/webzhuce
+
+**********************************************************************/
 #include<opencv2/opencv.hpp>
 using namespace cv;
 
