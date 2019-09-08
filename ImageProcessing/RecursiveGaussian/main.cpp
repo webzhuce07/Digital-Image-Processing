@@ -154,7 +154,7 @@ void RecursiveGausssmooth2D(const Mat &src, Mat &dst, float sigma = 2)
 
 int main(int argc, char *argv[])
 {
-    Mat src = imread("../GaussianSmooth/lena.bmp", 1);
+    Mat src = imread("../RecursiveGaussian/lena.bmp", 1);
     imshow("original", src);
 
     Mat dst;
