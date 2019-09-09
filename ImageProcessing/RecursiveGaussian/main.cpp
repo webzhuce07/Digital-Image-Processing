@@ -140,9 +140,9 @@ void RecursiveGausssmooth2D(const Mat &src, Mat &dst, float sigma = 2)
         }
         for (int x = 0; x < width; x++)
         {
-            RecursiveGausssmooth(srcdata + x, dstdata + x, height, width * 3, &c);
-            RecursiveGausssmooth(srcdata + x + 1, dstdata + x + 1, height, width * 3, &c);
-            RecursiveGausssmooth(srcdata + x + 2, dstdata + x + 2, height, width * 3, &c);
+            RecursiveGausssmooth(dstdata + x, dstdata + x, height, width * 3, &c);
+            RecursiveGausssmooth(dstdata + x + 1, dstdata + x + 1, height, width * 3, &c);
+            RecursiveGausssmooth(dstdata + x + 2, dstdata + x + 2, height, width * 3, &c);
         }
         dstcopy.convertTo(dst, src.type());
     }
