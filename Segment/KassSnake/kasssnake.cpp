@@ -14,10 +14,10 @@ KassSnake::KassSnake(const cv::Mat& src)
 		src.copyTo(src_);
 		cv::cvtColor(src, image_, CV_GRAY2BGR);
 	}
-
+	src_.convertTo(src_, CV_32FC1);
 }
 
-void KassSnake::segment(std::vector<cv::Point>& points)
+void KassSnake::segment(std::vector<cv::Point2f>& points)
 {
 	drawCurve(points);
 	//create pentagonal banded matrix
@@ -37,61 +37,50 @@ void KassSnake::segment(std::vector<cv::Point>& points)
 	Mat eext = wline_ * eline + wedge_ * eedge + wterm_ * eterm;
 	//calculate fx, fy
 	Mat fx = eext.clone(), fy = eext.clone();
-	Sobel(eext, fx, eext.depth(), 1, 0);
-	Sobel(eext, fy, eext.depth(), 0, 1);
+	gradient(eext, fx, fy);
 	
 	//iteration
 	Mat ssx(h, 1, CV_32FC1);
 	Mat ssy(h, 1, CV_32FC1);
 	Mat sx(h, 1, CV_32FC1);
 	Mat sy(h, 1, CV_32FC1);
-	for (int i = 0; i < h; i++)
-	{
-		sx.at<float>(i, 0) = points[i % points.size()].x;
-		sy.at<float>(i, 0) = points[i % points.size()].y;
-	}
-	for (int t = 0; t < 400; t++)
+	for (int t = 0; t < interation_; t++)
 	{
 		for (int i = 0; i < h; i++)
 		{
-			cv::Point &point = points[i % points.size()];
-			ssx.at<float>(i, 0) = gamma_ * point.x - 0.1 * fx.at<float>(point);
-			ssy.at<float>(i, 0) = gamma_ * point.y - 0.1 * fy.at<float>(point);
+			cv::Point2f &point = points[i % points.size()];
+			ssx.at<float>(i, 0) = gamma_ * point.x - kappa_ * fx.at<float>(point);
+			ssy.at<float>(i, 0) = gamma_ * point.y - kappa_ * fy.at<float>(point);
 		}
 		
 		sx = Ainv * ssx;
 		sy = Ainv * ssy;
-		//for showing
+		//update points
 		for (int i = 0; i < points.size(); i++)
 		{
-			int x = sx.at<float>(i, 0);
-			x = std::max(0, x);
-			x = std::min(x, src_.cols - 1);
+			float x = sx.at<float>(i, 0);
+			x = std::max(0.0f, x);
+			x = std::min(x, float(src_.cols - 1));
 			points[i].x = x;
-			int y = sy.at<float>(i, 0);
-			y = std::max(0, y);
-			y= std::min(y, src_.rows - 1);
+			float y = sy.at<float>(i, 0);
+			y = std::max(0.0f, y);
+			y = std::min(y, float(src_.rows - 1));
 			points[i].y = y;
 		}
+		//for showing
 		drawCurve(points);
 	}
 }
 
 cv::Mat KassSnake::getEline()
 {
-	Mat e;
-	src_.convertTo(e, CV_32FC1);
-	return e;
+	return src_.clone();
 }
 
 cv::Mat KassSnake::getEedge()
 {
-	Mat gx, gy, e;
-	src_.convertTo(gx, CV_32FC1);
-	src_.convertTo(gy, CV_32FC1);
-	src_.convertTo(e, CV_32FC1);
-	Sobel(src_, gx, gx.depth(), 1, 0);
-	Sobel(src_, gy, gy.depth(), 0, 1);
+	Mat gx, gy, e = src_.clone();
+	gradient(src_, gx, gy);
 	for (int i = 0; i < src_.rows; i++)
 	{
 		for (int j = 0; j < src_.cols; j++)
@@ -107,19 +96,20 @@ cv::Mat KassSnake::getEedge()
 cv::Mat KassSnake::getEterm()
 {
 	Mat src;
-	src_.convertTo(src, CV_32FC1);
-	GaussianBlur(src, src, Size(5, 5), sigma_);
-	Mat cx;
-	Sobel(src, cx, src.depth(), 1, 0);
-	Mat cy;
-	Sobel(src, cy, src.depth(), 0, 1);
-	Mat cxx;
-	Sobel(cx, cxx, src.depth(), 1, 0);
-	Mat cyy;
-	Sobel(cy, cyy, src.depth(), 0, 1);
-	Mat cxy;
-	Sobel(cx, cxy, src.depth(), 0, 1);	
-	Mat e = src.clone();
+	GaussianBlur(src_, src, Size(3, 3), sigma_);
+	Mat kernel;
+	kernel = (Mat_<float>(1, 2) << -1, 1);
+	Mat cx = conv2(src, kernel);
+	kernel = (Mat_<float>(2, 1) << -1, 1);
+	Mat cy = conv2(src, kernel);
+	kernel = (Mat_<float>(1, 3) << 1, -2, 1);
+	Mat cxx = conv2(src, kernel);
+	kernel = (Mat_<float>(3, 1) << 1, -2, 1);
+	Mat cyy = conv2(src, kernel);
+	kernel = (Mat_<float>(2, 2) << 1, -1, -1, 1);
+	Mat cxy = conv2(src, kernel);
+	
+	Mat e = src_.clone();
 	for (int i = 0; i < src_.rows; i++)
 	{
 		for (int j = 0; j < src_.cols; j++)
@@ -129,11 +119,8 @@ cv::Mat KassSnake::getEterm()
 			float xx = cxx.at<float>(i, j);
 			float yy = cyy.at<float>(i, j);
 			float xy = cxy.at<float>(i, j);
-			float sxy = x * x + y * y;
-			if (sxy > 1e-9)
-				e.at<float>(i, j) = (yy * x * x - 2.0 * xy * x * y + xx * y * y) / std::pow(sxy, 1.5);
-			else
-				e.at<float>(i, j) = 0.0f;
+			float sxy = x * x + y * y + 1.0f;
+			e.at<float>(i, j) = (yy * x * x - 2.0 * xy * x * y + xx * y * y) / std::pow(sxy, 1.5);
 		}
 	}
 	return e;
@@ -164,7 +151,55 @@ cv::Mat KassSnake::diagonalCycleMat(int n, float a, float b, float c)
 	return A;
 }
 
-void KassSnake::drawCurve(std::vector<cv::Point> &points)
+//same as C = conv2(A,B,'same')
+cv::Mat KassSnake::conv2(const cv::Mat &src, cv::Mat &kernel)
+{
+	//rotate kernel 180 degrees for convolution
+	flip(kernel, kernel, 0);
+	flip(kernel, kernel, 1);
+	Mat dstImage = src.clone();
+	int x = kernel.cols - 1;
+	int y = kernel.rows - 1;
+	copyMakeBorder(src, dstImage, y, y, x, x, BORDER_CONSTANT, 0);
+	x = kernel.cols / 2.0;
+	y = kernel.rows / 2.0;
+	filter2D(dstImage, dstImage, dstImage.depth(), kernel, cv::Point(0, 0));
+	return dstImage(cv::Rect(x, y, src.cols, src.rows));
+}
+
+void KassSnake::gradient(const cv::Mat &src, cv::Mat &gradx, cv::Mat &grady)
+{
+	if (src.rows < 2 || src.cols < 2)
+		return;
+	src.copyTo(gradx);
+	src.copyTo(grady);
+	for (int i = 0; i < src.rows; i++)
+	{
+		for (int j = 0; j < src.cols; j++)
+		{
+			if(j == 0)
+				gradx.at<float>(i, j) = src.at<float>(i, j + 1) - src.at<float>(i, j);
+			else if(j == src.cols -1)
+				gradx.at<float>(i, j) = src.at<float>(i, j) - src.at<float>(i, j - 1);
+			else
+				gradx.at<float>(i, j) = (src.at<float>(i, j + 1) - src.at<float>(i, j - 1)) / 2.0;
+		}
+	}
+	for (int j = 0; j < src.cols; j++)
+	{
+		for (int i = 0; i < src.rows; i++)
+		{
+			if (i == 0)
+				grady.at<float>(i, j) = src.at<float>(i + 1, j) - src.at<float>(i, j);
+			else if (i == src.rows - 1)
+				grady.at<float>(i, j) = src.at<float>(i, j) - src.at<float>(i - 1, j);
+			else
+				grady.at<float>(i, j) = (src.at<float>(i + 1, j) - src.at<float>(i - 1, j)) / 2.0;
+		}
+	}
+}
+
+void KassSnake::drawCurve(std::vector<cv::Point2f> &points)
 {
 	cv::Mat image = image_.clone();
 	for (int i = 0; i < points.size(); i++)

@@ -18,16 +18,17 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-        src = cv::imread("../KassSnake/circle.bmp", 0);
+        src = cv::imread("./circle.jpg", 0);
 		x0 = 10; y0 = 20; x1 = 230; y1 = 240; step = 10;
 	}
 		
-	std::vector<cv::Point> points;
-	for (int i = 0 ; i <= 400; i++)
+	std::vector<cv::Point2f> points;
+	const int num = 100;
+	for (int i = 0 ; i < num; i++)
 	{
-		float theta = 2 * 3.1415926 / 400 * i;
-		int x = 130 + 110 * cos(theta);
-		int y = 126 + 110 * sin(theta);
+		float theta = 2 * 3.1415926 / num * i;
+		float x = 130 + 110 * cos(theta);
+		float y = 126 + 110 * sin(theta);
 		points.push_back({ x, y });
 	}
 	////up side
