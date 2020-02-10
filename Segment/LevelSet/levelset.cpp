@@ -1,4 +1,10 @@
-﻿#include "levelset.h"
+﻿/**********************************************************************
+
+Copyright (c) Mr.Bin. All rights reserved.
+For more information visit: http://blog.csdn.net/webzhuce
+
+**********************************************************************/
+#include "levelset.h"
 
 using namespace cv;
 using namespace std;
