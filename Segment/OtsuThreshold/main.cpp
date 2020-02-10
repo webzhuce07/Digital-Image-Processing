@@ -5,6 +5,8 @@ using namespace cv;
 
 double MyOtsu(const Mat& image, const uint graylevel = 256)
 {
+	CV_Assert(image.type() == CV_8UC1);
+
 	//computer Histogram
 	std::vector<long> histogram(graylevel, 0);
 	for (int i = 0; i < image.rows; i++)
@@ -45,7 +47,7 @@ double MyOtsu(const Mat& image, const uint graylevel = 256)
 
 int main()
 {
-	Mat img = imread("coins.png");
+	Mat img = imread("../../ImageData/coins.png");
 	Mat src;
 	cvtColor(img, src, CV_BGR2GRAY);
 
@@ -54,8 +56,9 @@ int main()
 	//call the Otsu method of OpenCV
 	Mat dst;
 	cout << "The return value of OpenCV threshold is: " << threshold(src, dst, 0, 255, CV_THRESH_OTSU) << endl;
+	imshow("Threshold Segment", dst);
+	waitKey();
 
-	system("pause");
 	return 0;
 
 }
