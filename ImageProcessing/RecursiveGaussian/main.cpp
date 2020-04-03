@@ -100,7 +100,7 @@ void RecursiveGausssmooth(float *in, float *out, int size, int rowstride, GaussC
 /*
 @function: 2D gauss filter
 */
-void RecursiveGausssmooth2D(const Mat &src, Mat &dst, float sigma = 2)
+void RecursiveGausssmooth2D(const Mat &src, Mat &dst, float sigma = 1.0f)
 {
     GaussCoefs c;
     ComputeGaussCoefs(&c, sigma);
@@ -120,7 +120,7 @@ void RecursiveGausssmooth2D(const Mat &src, Mat &dst, float sigma = 2)
         }
         for (int x = 0; x < width; x++)
         {
-            RecursiveGausssmooth(srcdata + x, dstdata + x, height, width, &c);
+            RecursiveGausssmooth(dstdata + x, dstdata + x, height, width, &c);
         }
         dstcopy.convertTo(dst, src.type());
     }
@@ -130,26 +130,26 @@ void RecursiveGausssmooth2D(const Mat &src, Mat &dst, float sigma = 2)
         src.convertTo(srccopy, CV_32FC3);
         Mat dstcopy;
         src.convertTo(dstcopy, CV_32FC3);
-        float* srcdata = srccopy.ptr<float>(0);
-        float* dstdata = dstcopy.ptr<float>(0);
         for (int y = 0; y < height; y++)
         {
-            RecursiveGausssmooth(srcdata + y * width, dstdata + y * width, width, 3, &c);
-            RecursiveGausssmooth(srcdata + y * width + 1, dstdata + y * width + 1, width, 3, &c);
-            RecursiveGausssmooth(srcdata + y * width + 2, dstdata + y * width + 2, width, 3, &c);
+			float* srcrowdata = srccopy.ptr<float>(y);
+			float* dstrowdata = dstcopy.ptr<float>(y);
+            RecursiveGausssmooth(srcrowdata, dstrowdata, width, 3, &c);
+            RecursiveGausssmooth(srcrowdata + 1, dstrowdata + 1, width, 3, &c);
+            RecursiveGausssmooth(srcrowdata + 2, dstrowdata + 2, width, 3, &c);
         }
-        for (int x = 0; x < width; x++)
-        {
-            RecursiveGausssmooth(dstdata + x, dstdata + x, height, width * 3, &c);
-            RecursiveGausssmooth(dstdata + x + 1, dstdata + x + 1, height, width * 3, &c);
-            RecursiveGausssmooth(dstdata + x + 2, dstdata + x + 2, height, width * 3, &c);
-        }
+		float* srcdata = srccopy.ptr<float>(0);
+		float* dstdata = dstcopy.ptr<float>(0);
+		for (int x = 0; x < width; x++)
+		{
+			RecursiveGausssmooth(dstdata + x * 3, dstdata + x * 3, height, width * 3, &c);
+			RecursiveGausssmooth(dstdata + x * 3 + 1, dstdata + x * 3 + 1, height, width * 3, &c);
+			RecursiveGausssmooth(dstdata + x * 3 + 2, dstdata + x * 3 + 2, height, width * 3, &c);
+		}
         dstcopy.convertTo(dst, src.type());
     }
     else
         return;
-
-
 }
 
 int main(int argc, char *argv[])
@@ -159,7 +159,11 @@ int main(int argc, char *argv[])
 
     Mat dst;
     RecursiveGausssmooth2D(src, dst);
-    imshow(" RecursiveGausssmooth", dst);
+    imshow(" RecursiveGaussSmooth", dst);
+
+	Mat dstImage;
+	GaussianBlur(src, dstImage, Size(5, 5), 2, 2);
+	imshow("GaussSmooth", dstImage);
 
     waitKey(0);
     return EXIT_SUCCESS;
