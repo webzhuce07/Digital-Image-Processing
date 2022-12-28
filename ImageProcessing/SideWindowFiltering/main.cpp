@@ -11,8 +11,8 @@ using namespace cv;
 
 int main(int argc, char *argv[]) {
 
-	Mat inputImage = imread("./0.jpg", 1);
-	int radius = 2;
+	Mat inputImage = imread("./render171.png", 1);
+	int radius = 4;
 	int iteration = 10;
 	int height = inputImage.rows;
 	int width = inputImage.cols;
